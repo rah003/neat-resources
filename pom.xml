@@ -19,9 +19,9 @@
 
   <!-- Please double-check these URLs -->
   <scm>
-    <connection>scm:git:http://git.magnolia-cms.com/forge/neat-resources</connection>
-    <developerConnection>scm:git:https://git.magnolia-cms.com/forge/neat-resources</developerConnection>
-    <url>http://git.magnolia-cms.com/gitweb/?p=forge/neat-resources</url>
+    <connection>scm:git:https://github.com/rah003/neat-resources.git</connection>
+    <developerConnection>scm:git:https://github.com/rah003/neat-resources.git</developerConnection>
+    <url>https://github.com/rah003/neat-resources</url>
     <tag>HEAD</tag>
   </scm>
 
