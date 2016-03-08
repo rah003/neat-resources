@@ -29,27 +29,27 @@ import info.magnolia.module.resources.ResourceLinker;
 import info.magnolia.resourceloader.Resource;
 import info.magnolia.resourceloader.ResourceOrigin;
 import info.magnolia.resourceloader.ResourceVisitor;
-import info.magnolia.resourceloader.layered.LayeredResource;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.PatternSyntaxException;
 
 import javax.inject.Inject;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Templating Functions to expose json builder.
  */
 public class ResourcesTemplatingFunctions {
 
-    private ResourceOrigin<LayeredResource> origin;
+    private @SuppressWarnings("rawtypes") ResourceOrigin origin;
     private ResourceLinker linker;
 
     @Inject
-    public ResourcesTemplatingFunctions(ResourceOrigin<LayeredResource> resourceOrigin, ResourceLinker linker) {
+    // surprisingly enough non-generic declaration with layered origin will make Guice fail miserable ... go figure
+    public ResourcesTemplatingFunctions(@SuppressWarnings("rawtypes") ResourceOrigin resourceOrigin, ResourceLinker linker) {
         this.origin = resourceOrigin;
         this.linker = linker;
     }
@@ -147,14 +147,17 @@ public class ResourcesTemplatingFunctions {
     }
 
     private String generate(List<String> patterns, String prefix, String suffix, final boolean isCached) {
-        List<String> results = new LinkedList<>();
+        // yes, order matters!
+        Map<String, List<String>> intermediates = new LinkedHashMap<>();
+        patterns.stream().forEach(pattern -> intermediates.put(pattern, new LinkedList<>()));
         origin.traverseWith(new ResourceVisitor() {
 
             @Override
             public void visitFile(final Resource resource) {
-                if (patterns.parallelStream().anyMatch(pattern -> matchSafely(resource.getPath(), pattern))) {
-                    results.add(prefix + linker.linkTo(resource.getPath(), isCached) + suffix);
-                }
+                patterns.stream()
+                .filter(pattern -> matchSafely(resource.getPath(), pattern))
+                .map(pattern -> intermediates.get(pattern))
+                        .forEach(results -> results.add(prefix + linker.linkTo(resource.getPath(), isCached) + suffix));
             }
 
             private boolean matchSafely(String resource, String pattern) {
@@ -171,6 +174,18 @@ public class ResourcesTemplatingFunctions {
                 return true;
             }
         });
-        return StringUtils.join(results, "\n");
+
+        StringBuilder results = new StringBuilder();
+        List<String> hits = new LinkedList<>();
+        // de dup (first match wins)
+        intermediates.values().stream()
+        .forEach(patternResults -> patternResults.stream()
+                .filter(potentialHit -> !hits.contains(potentialHit))
+                .forEach(hit -> {
+                    results.append(hit).append("\n");
+                    hits.add(hit);
+                }));
+
+        return results.toString();
     }
 }
