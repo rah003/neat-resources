@@ -85,7 +85,7 @@ Maven dependency
     <dependency>
       <groupId>com.neatresults.mgnltweaks</groupId>
       <artifactId>neat-resources</artifactId>
-      <version>1.0</version>
+      <version>1.0.1</version>
     </dependency>
 ```
 
@@ -93,7 +93,7 @@ Versions
 -----------------
 Version 1.0.x should be compatible with all Magnolia 5.x versions, but was tested only on 5.4.3 and not before. If you run into any issues w/ older versions, please report them back.
 
-Latest version can be found at https://nexus.magnolia-cms.com/service/local/repositories/magnolia.forge.releases/content/com/neatresults/mgnltweaks/1.0/neat-resources-1.0.jar
+Latest version can be found at https://nexus.magnolia-cms.com/service/local/repositories/magnolia.forge.releases/content/com/neatresults/mgnltweaksi/neat-resources/1.0.1/neat-resources-1.0.1.jar
 
 Installation & updates
 -----------------
@@ -102,5 +102,9 @@ Upon instalation, module will register templating functions class and expose it 
 
 Changes
 -----------------
+1.0.1
+- fixed module descriptor to ensure correct init.
+- introduced de-duplication of outputed links when multiple patterns are used in single call.
+
 1.0
-- demo functions.
+- functions for printing links to css and js resources from within template.
