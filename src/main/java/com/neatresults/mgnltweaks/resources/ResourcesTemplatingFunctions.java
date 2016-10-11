@@ -149,14 +149,15 @@ public class ResourcesTemplatingFunctions {
     private String generate(List<String> patterns, String prefix, String suffix, final boolean isCached) {
         // yes, order matters!
         Map<String, List<String>> intermediates = new LinkedHashMap<>();
-        patterns.stream().forEach(pattern -> intermediates.put(pattern, new LinkedList<>()));
+        patterns.stream()
+                .forEach(pattern -> intermediates.put(pattern, new LinkedList<>()));
         origin.traverseWith(new ResourceVisitor() {
 
             @Override
             public void visitFile(final Resource resource) {
                 patterns.stream()
-                .filter(pattern -> matchSafely(resource.getPath(), pattern))
-                .map(pattern -> intermediates.get(pattern))
+                        .filter(pattern -> matchSafely(resource.getPath(), pattern))
+                        .map(pattern -> intermediates.get(pattern))
                         .forEach(results -> results.add(prefix + linker.linkTo(resource.getPath(), isCached) + suffix));
             }
 
