@@ -1,6 +1,11 @@
 Resource Templating Functions
 =======================
 
+Archive note
+-------
+Code in this project have been merged into Magnolia codebase hence there's no need to maintain it separately anymore.
+
+
 Code of this project have been meanwhile adopted by Magnolia Intl and merged in magnolia-resources-templating version 2.5.1 (containing exactly same functionality as this project version 1.0.1). The only change is name of templating function from ```hcmcfn``` to ```resfn```. For more details see [their documentation](https://documentation.magnolia-cms.com/display/DOCS/resfn). Feel free to use whichever flavour of the code you want.
 
 A [module](https://documentation.magnolia-cms.com/display/DOCS/Modules) for the [Magnolia CMS](http://www.magnolia-cms.com) for generating links to resources easily in your Magnolia CMS based templates.
